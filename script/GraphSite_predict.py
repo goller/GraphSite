@@ -10,7 +10,7 @@ HHDB = "/dat/uniclust30_2017_10/uniclust30_2017_10"
 
 Software_path = "/dat/"
 PSIBLAST = Software_path + "ncbi-blast-2.10.1+/bin/psiblast"
-HHBLITS = Software_path + "hhsuite-3.0.3/bin/hhblits"
+HHBLITS = Software_path + "hhsuite-3.3.0/bin/hhblits"
 DSSP = Software_path + "dssp-3.1.4/mkdssp"
 script_path = os.path.split(os.path.realpath(__file__))[0] + "/"
 model_path = os.path.dirname(script_path[0:-1]) + "/Model/"
