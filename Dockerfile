@@ -12,6 +12,11 @@ WORKDIR /dat
 RUN curl --output ncbi-blast-2.10.1+-x64-linux.tar.gz https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.1/ncbi-blast-2.10.1+-x64-linux.tar.gz && \
     tar -xzf ncbi-blast-2.10.1+-x64-linux.tar.gz && rm ncbi-blast-2.10.1+-x64-linux.tar.gz
 
+
+# ARM: https://mmseqs.com/hhsuite/hhsuite-linux-arm64.tar.gz
+RUN curl --output hhsuite-linux-avx2.tar.gz https://mmseqs.com/hhsuite/hhsuite-linux-avx2.tar.gz && \
+    tar -xvf hhsuite-linux-avx2.tar.gz && rm hhsuite-linux-avx2.tar.gz
+
 WORKDIR /src
 COPY . .
 
