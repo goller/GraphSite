@@ -38,7 +38,7 @@ RUN python3 -m pip install biopython==1.78 --only-binary :all:
 
 # TODO(goller): slim this down to just what dssp needs
 RUN apt-get update && \
-    apt-get install -y git glibboost-all-dev libbz2-dev
+    apt-get install -y git libboost-all-dev libbz2-dev
 
 COPY --from=dssp /app/dssp/mkdssp /dat/dssp-3.1.4/mkdssp
 
