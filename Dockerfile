@@ -35,6 +35,13 @@ RUN python3 -m pip install -U pip setuptools
 RUN python3 -m pip install numpy==1.19.4   --only-binary :all:
 RUN python3 -m pip install pandas==1.1.3   --only-binary :all:
 RUN python3 -m pip install biopython==1.78 --only-binary :all:
+
+# TODO(goller): slim this down to just what dssp needs
+RUN apt-get update && \
+    apt-get install -y git glibboost-all-dev libbz2-dev
+
+COPY --from=dssp /app/dssp/mkdssp /dat/dssp-3.1.4/mkdssp
+
 # GOLLER: see https://pytorch.org/get-started/previous-versions/#linux-and-windows-27 for CUDA
 # NOTE: only works for amd64
 RUN python3 -m pip install torch==1.7.1+cpu torchvision==0.8.2+cpu torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
