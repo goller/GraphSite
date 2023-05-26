@@ -5,10 +5,10 @@ from model import *
 
 # Set these paths to your own paths
 # Note that in UR90, 'uniref90' (last of the variable) is the prefix of the built database files in the database folder. Same does HHDB.
-UR90 = "/bigdat1/pub/yuanqm/uniref90_2018_06/uniref90"
-HHDB = "/bigdat1/pub/uniclust30/uniclust30_2017_10/uniclust30_2017_10"
+UR90 = "/dat/uniref90_2018_06/uniref90"
+HHDB = "/dat/uniclust30_2017_10/uniclust30_2017_10"
 
-Software_path = "/data2/users/yuanqm/PPI/Software/"
+Software_path = "/dat/"
 PSIBLAST = Software_path + "ncbi-blast-2.10.1+/bin/psiblast"
 HHBLITS = Software_path + "hhsuite-3.0.3/bin/hhblits"
 DSSP = Software_path + "dssp-3.1.4/mkdssp"
