@@ -36,9 +36,15 @@ RUN python3 -m pip install numpy==1.19.4   --only-binary :all:
 RUN python3 -m pip install pandas==1.1.3   --only-binary :all:
 RUN python3 -m pip install biopython==1.78 --only-binary :all:
 
-# TODO(goller): slim this down to just what dssp needs
 RUN apt-get update && \
-    apt-get install -y git libboost-all-dev libbz2-dev
+    apt-get install -y  \
+    libboost-date-time-dev \
+    libboost-filesystem-dev \
+    libboost-iostreams-dev\
+    libboost-program-options-dev\
+    libboost-system-dev \
+    libboost-thread-dev \
+    libbz2-dev
 
 COPY --from=dssp /app/dssp/mkdssp /dat/dssp-3.1.4/mkdssp
 
