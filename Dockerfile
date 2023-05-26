@@ -1,5 +1,35 @@
 # syntax=docker/dockerfile-upstream:master-labs
-FROM python:3.8.5
+FROM python:3.8.5 as dssp
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y make rsync wget && \
+    apt-get install -y git g++ libboost-all-dev libbz2-dev doxygen xsltproc docbook docbook-xsl docbook-xml autoconf automake autotools-dev && \
+    mkdir -p /deps
+
+# Install libzeep
+RUN git clone https://github.com/mhekkel/libzeep.git /deps/libzeep ;\
+    cd /deps/libzeep ;\
+    git checkout tags/v3.0.3
+# XXX: Workaround due to bug in libzeep's makefile
+RUN sed -i '71s/.*/\t\$\(CXX\) \-shared \-o \$@ \-Wl,\-soname=\$\(SO_NAME\) \$\(OBJECTS\) \$\(LDFLAGS\)/' /deps/libzeep/makefile
+WORKDIR /deps/libzeep
+# XXX: Run ldconfig manually to work around a bug in libzeep's makefile
+RUN make ; make install ; ldconfig
+
+WORKDIR /app
+
+RUN git clone https://github.com/cmbi/hssp.git && \
+    cd hssp && \
+    git checkout 3.1.4 && \
+    ./autogen.sh && \
+    ./configure && \
+    make && \
+    make install
+
+# syntax=docker/dockerfile-upstream:master-labs
+FROM python:3.8.5 as build
 RUN python3 -m pip install -U pip setuptools
 RUN python3 -m pip install numpy==1.19.4   --only-binary :all:
 RUN python3 -m pip install pandas==1.1.3   --only-binary :all:
