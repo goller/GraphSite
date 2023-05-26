@@ -20,9 +20,10 @@ RUN make ; make install ; ldconfig
 
 WORKDIR /app
 
-RUN git clone https://github.com/cmbi/hssp.git && \
-    cd hssp && \
-    git checkout 3.1.4 && \
+# TODO(goller): this branch remove the -Werror flag.  It is branched from 3.1.4.
+RUN git clone https://github.com/goller/dssp.git && \
+    cd dssp && \
+    git checkout remove-werror && \
     ./autogen.sh && \
     ./configure && \
     make && \
