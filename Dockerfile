@@ -34,7 +34,7 @@ RUN apt-get update && \
     apt-get install -y aria2
 
 WORKDIR /dat
-RUN aria2c https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz --dir=/dat && gunzip uniref90.fasta.gz
+RUN aria2c -x5 -k1M https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz --dir=/dat && gunzip uniref90.fasta.gz
 
 # syntax=docker/dockerfile-upstream:master-labs
 FROM python:3.8.5 as build
