@@ -35,6 +35,20 @@ RUN apt-get update && \
 
 WORKDIR /dat
 RUN aria2c -x5 -k1M https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz --dir=/dat && gunzip uniref90.fasta.gz
+# this seems faster: ftp://ftp.expasy.org/databases/uniprot/current_release/uniref/uniref90/uniref90.fasta.gz
+# I guess we could but the RUNs together, but, ug, with errors it's crushing to wait for the download.
+
+RUN makeblastdb -dbtype prot -in uniref90.fasta -blastdb_version 5
+WORKDIR /dat/uniref90_2018_06
+RUN mv ../uniref90.fasta* .
+
+FROM python:3.8.5 as unicluster
+RUN apt-get update && \
+    apt-get install -y aria2 pigz
+
+WORKDIR /dat/uniclust30_2017_10
+RUN aria2c -x4 -k1M https://wwwuser.gwdg.de/~compbiol/uniclust/2017_10/uniclust30_2017_10_hhsuite.tar.gz --dir=/dat/uniclust30_2017_10 && tar -I pigz --no-same-owner --no-same-permissions -xvf uniclust30_2017_10_hhsuite.tar.gz
+
 
 # syntax=docker/dockerfile-upstream:master-labs
 FROM python:3.8.5 as build
@@ -63,6 +77,9 @@ WORKDIR /dat
 RUN curl --output ncbi-blast-2.10.1+-x64-linux.tar.gz https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.1/ncbi-blast-2.10.1+-x64-linux.tar.gz && \
     tar -xzf ncbi-blast-2.10.1+-x64-linux.tar.gz && rm ncbi-blast-2.10.1+-x64-linux.tar.gz
 
+# TODO(goller): Temporary until we put the entire pipeline together.
+COPY uniclust30_2017_10 /dat/uniclust30_2017_10
+COPY uniref90 /dat/uniref90_2018_06
 
 # ARM: https://mmseqs.com/hhsuite/hhsuite-linux-arm64.tar.gz
 # TODO(goller): We aren't sure if 3.3.0 is the right version.
@@ -70,7 +87,9 @@ RUN curl --output hhsuite-linux-avx2.tar.gz https://mmseqs.com/hhsuite/hhsuite-l
     tar -xvf hhsuite-linux-avx2.tar.gz && rm hhsuite-linux-avx2.tar.gz && \
     mv hhsuite /dat/hhsuite-3.3.0
 
+
 WORKDIR /src
-COPY . .
+COPY Dataset /src
+COPY Model /src
 
 # ftp://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz <-- 38GB!!
